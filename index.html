@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DEVIL // SYSTEM</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at center, #250006 0%, #080000 45%, #000 100%);
+    color: #ff1744;
+    font-family: monospace;
+    overflow-x: hidden;
+}
+
+/* Scanline effect */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(255, 0, 40, 0.025) 4px
+    );
+}
+
+.container {
+    width: 92%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 35px 20px;
+    text-align: center;
+    border: 1px solid #ff1744;
+    box-shadow:
+        0 0 15px #ff1744,
+        inset 0 0 25px #ff174422;
+}
+
+.logo {
+    font-size: clamp(55px, 15vw, 110px);
+    letter-spacing: 15px;
+    font-weight: bold;
+    text-shadow:
+        0 0 5px #ff1744,
+        0 0 20px #ff1744,
+        0 0 50px #ff1744;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px #ff1744;
+    }
+    to {
+        text-shadow:
+            0 0 10px #ff1744,
+            0 0 35px #ff1744,
+            0 0 70px #ff1744;
+    }
+}
+
+.line {
+    height: 1px;
+    background: #ff1744;
+    margin: 25px 0;
+    box-shadow: 0 0 10px #ff1744;
+}
+
+.status {
+    color: #aaa;
+    margin-bottom: 30px;
+}
+
+.status span {
+    color: #00ff66;
+}
+
+.menu {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+button,
+.upload {
+    font-family: monospace;
+    font-weight: bold;
+    color: #ff1744;
+    background: #080000;
+    border: 1px solid #ff1744;
+    padding: 13px 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover,
+.upload:hover {
+    background: #ff1744;
+    color: #000;
+    box-shadow: 0 0 20px #ff1744;
+}
+
+input {
+    display: none;
+}
+
+#preview {
+    display: none;
+    width: 100%;
+    max-height: 450px;
+    object-fit: contain;
+    margin: 25px auto;
+    border: 1px solid #ff1744;
+    box-shadow: 0 0 20px #ff174455;
+}
+
+.console {
+    text-align: left;
+    border: 1px solid #300008;
+    background: #030303;
+    padding: 15px;
+    margin-top: 25px;
+    color: #777;
+}
+
+.console b {
+    color: #ff1744;
+}
+
+#gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.gallery-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border: 1px solid #ff1744;
+}
+
+footer {
+    color: #555;
+    margin-top: 30px;
+    font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">DEVIL</div>
+
+    <div class="line"></div>
+
+    <div class="status">
+        SYSTEM STATUS:
+        <span>ONLINE</span>
+    </div>
+
+    <div class="menu">
+
+        <label class="upload">
+            + UPLOAD PHOTO
+            <input type="file" id="photo" accept="image/*">
+        </label>
+
+        <button onclick="clearGallery()">
+            CLEAR
+        </button>
+
+    </div>
+
+    <img id="preview">
+
+    <div class="console">
+        <b>DEVIL@SYSTEM:~$</b>
+        <span id="message"> Waiting for input...</span>
+    </div>
+
+    <div id="gallery"></div>
+
+    <footer>
+        DEVIL // PERSONAL CYBER SPACE
+    </footer>
+
+</div>
+
+<script>
+
+const input = document.getElementById("photo");
+const preview = document.getElementById("preview");
+const gallery = document.getElementById("gallery");
+const message = document.getElementById("message");
+
+input.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+        message.textContent = " ERROR: IMAGE ONLY";
+        return;
+    }
+
+    const url = URL.createObjectURL(file);
+
+    preview.src = url;
+    preview.style.display = "block";
+
+    const img = document.createElement("img");
+    img.src = url;
+    img.className = "gallery-img";
+
+    gallery.appendChild(img);
+
+    message.textContent =
+        " IMAGE LOADED: " + file.name;
+});
+
+function clearGallery() {
+    gallery.innerHTML = "";
+    preview.style.display = "none";
+    preview.src = "";
+    message.textContent = " GALLERY CLEARED";
+}
+
+</script>
+
+</body>
+</html>
